@@ -19,3 +19,9 @@ htmlcov/
 !.env.example
 report/
 screenshots/
+# Terraform generated files and local secrets
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+terraform/crash.log
