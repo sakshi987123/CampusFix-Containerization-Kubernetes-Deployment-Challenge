@@ -207,12 +207,21 @@ def create_app(test_config=None):
     def complaint_attachment(ticket_id):
         if ticket_id.upper() not in session.get("verified_tickets", []):
             abort(404)
+
         row = get_db().execute(
-            "SELECT attachment_name FROM complaints WHERE ticket_id = ?", (ticket_id.upper(),)
+            "SELECT attachment_name FROM complaints WHERE ticket_id = ?",
+            (ticket_id.upper(),)
         ).fetchone()
+
         if row is None or not row["attachment_name"]:
             abort(404)
-        return send_from_directory(app.config["UPLOAD_FOLDER"], row["attachment_name"])
+
+        response = send_from_directory(
+            app.config["UPLOAD_FOLDER"],
+            row["attachment_name"],
+            mimetype="image/" + row["attachment_name"].rsplit(".", 1)[-1].lower()
+        )
+        return response
 
     @app.get("/uploads/<path:filename>")
     def uploaded_file(filename):

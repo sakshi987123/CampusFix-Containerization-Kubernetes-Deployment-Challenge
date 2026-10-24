@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=campusfix:campusfix app.py config.py database.py gunicorn.conf.py ./
 COPY --chown=campusfix:campusfix templates ./templates
 COPY --chown=campusfix:campusfix static ./static
+COPY --chown=campusfix:campusfix tests ./tests
 RUN mkdir -p /data /app/instance && chown -R campusfix:campusfix /data /app
 
 USER 10001:10001
