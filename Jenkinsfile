@@ -28,7 +28,7 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running automated tests...'
-                sh 'docker run --rm --entrypoint python campusfix:ci -m pytest tests/ -v'
+                sh 'docker run --rm -e APP_ENV=testing -e SECRET_KEY=test-only-secret-key-for-ci --entrypoint python campusfix:ci -m pytest tests/ -v'
             }
         }
 
