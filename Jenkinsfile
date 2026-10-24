@@ -8,6 +8,8 @@ pipeline {
     environment {
         IMAGE_NAME = 'campusfix:ci'
         CONTAINER_NAME = 'campusfix'
+        CAMPUSFIX_SECRET_KEY = credentials('CAMPUSFIX_SECRET_KEY')
+
     }
 
     stages {
@@ -33,24 +35,24 @@ pipeline {
         }
 
         stage('Deploy') {
-            steps {
-                echo 'Deploying CampusFix...'
-                sh '''
-                    docker rm -f campusfix || true
-                    docker run -d \
-                      --name campusfix \
-                      --restart unless-stopped \
-                      -p 5000:5000 \
-                      --env-file .env \
-                      -e APP_ENV=production \
-                      -e CAMPUSFIX_DB=/data/campusfix.db \
-                      -e UPLOAD_FOLDER=/data/uploads \
-                      -e SESSION_COOKIE_SECURE=false \
-                      -v campusfix-data:/data \
-                      campusfix:ci
-                '''
-            }
-        }
+    steps {
+        echo 'Deploying CampusFix...'
+        sh '''
+            docker rm -f campusfix || true
+            docker run -d \
+              --name campusfix \
+              --restart unless-stopped \
+              -p 5000:5000 \
+              -e APP_ENV=production \
+              -e SECRET_KEY="$CAMPUSFIX_SECRET_KEY" \
+              -e CAMPUSFIX_DB=/data/campusfix.db \
+              -e UPLOAD_FOLDER=/data/uploads \
+              -e SESSION_COOKIE_SECURE=false \
+              -v campusfix-data:/data \
+              campusfix:ci
+        '''
+    }
+}
     }
 
     post {
