@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block title %}Administrator sign in | CampusFix{% endblock %}
+{% block content %}
+<header class="page-heading"><div><div class="eyebrow">CAMPUS OPERATIONS <span>/</span> ADMINISTRATION</div><h1>Administrator sign in</h1><p class="subheading">Authorized facilities staff only.</p></div></header>
+<section class="panel login-panel"><div class="login-mark"><i class="bi bi-shield-lock"></i></div><h2>Welcome back</h2><p>Sign in to manage complaint status and assignments.</p><form method="post" action="{{ url_for('admin_login') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><div class="mb-3"><label for="email" class="form-label">Administrator email</label><input class="form-control" id="email" name="email" type="email" autocomplete="username" required></div><div class="mb-4"><label for="password" class="form-label">Password</label><input class="form-control" id="password" name="password" type="password" autocomplete="current-password" required></div><button class="btn btn-primary action-button w-100" type="submit"><i class="bi bi-box-arrow-in-right"></i> Sign in</button></form></section>
+{% endblock %}

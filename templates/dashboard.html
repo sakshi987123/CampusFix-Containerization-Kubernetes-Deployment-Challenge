@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Overview | CampusFix{% endblock %}
+{% block content %}
+<header class="page-heading">
+  <div><div class="eyebrow">CAMPUS OPERATIONS <span>/</span> OVERVIEW</div><h1>Dashboard</h1><p class="subheading">A live view of campus maintenance requests.</p></div>
+  <a class="btn btn-primary action-button" href="{{ url_for('submit_complaint') }}"><i class="bi bi-plus-lg"></i> New complaint</a>
+</header>
+<section class="welcome-strip">
+  <div class="welcome-copy"><span class="welcome-kicker">YOUR CAMPUS, IN BETTER SHAPE</span><h2>Small fixes make a big difference.</h2><p>Report an issue and follow its progress from submission to resolution.</p><a href="{{ url_for('submit_complaint') }}" class="welcome-link">Report an issue <i class="bi bi-arrow-up-right"></i></a></div>
+  <div class="welcome-stamp"><i class="bi bi-buildings"></i><span>CARE<br>IN ACTION</span></div>
+</section>
+<section class="stats-grid" aria-label="Complaint statistics">
+  <article class="stat-card"><div class="stat-label">Total complaints<span class="stat-icon icon-blue"><i class="bi bi-inbox"></i></span></div><div class="stat-value">{{ stats.total }}</div><div class="stat-foot">All submitted requests</div></article>
+  <article class="stat-card"><div class="stat-label">Pending<span class="stat-icon icon-amber"><i class="bi bi-hourglass-split"></i></span></div><div class="stat-value">{{ stats.pending }}</div><div class="stat-foot">Awaiting review</div></article>
+  <article class="stat-card"><div class="stat-label">In progress<span class="stat-icon icon-teal"><i class="bi bi-arrow-repeat"></i></span></div><div class="stat-value">{{ stats.progress }}</div><div class="stat-foot">Being worked on</div></article>
+  <article class="stat-card"><div class="stat-label">Resolved<span class="stat-icon icon-green"><i class="bi bi-check2-circle"></i></span></div><div class="stat-value">{{ stats.resolved }}</div><div class="stat-foot">Marked complete</div></article>
+</section>
+<section class="dashboard-grid">
+  <article class="panel recent-panel">
+    <div class="panel-head"><div><div class="eyebrow">LATEST ACTIVITY</div><h2>Recent complaints</h2></div><a class="text-link" href="{{ url_for('track_complaint') }}">Track request <i class="bi bi-arrow-right"></i></a></div>
+    {% if recent %}<div class="table-responsive"><table class="table data-table align-middle"><thead><tr><th>REQUEST</th><th>CATEGORY</th><th>PRIORITY</th><th>STATUS</th><th></th></tr></thead><tbody>
+      {% for complaint in recent %}<tr><td><strong>{{ complaint.title }}</strong><small>{{ complaint.ticket_id }} · {{ complaint.created_at[:10] }}</small></td><td>{{ complaint.category }}</td><td><span class="priority priority-{{ complaint.priority|lower }}">{{ complaint.priority }}</span></td><td><span class="status status-{{ complaint.status|lower|replace(' ', '-') }}">{{ complaint.status }}</span></td><td><a class="icon-link" href="{{ url_for('track_complaint', ticket_id=complaint.ticket_id) }}" aria-label="Track {{ complaint.ticket_id }}"><i class="bi bi-arrow-up-right"></i></a></td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<div class="empty-state"><span class="empty-symbol"><i class="bi bi-inbox"></i></span><h3>No complaints yet</h3><p>Reports submitted by students will appear here.</p><a class="btn btn-outline-primary" href="{{ url_for('submit_complaint') }}">Create first report</a></div>{% endif %}
+  </article>
+  <article class="panel category-panel">
+    <div class="panel-head"><div><div class="eyebrow">REQUEST MIX</div><h2>By category</h2></div></div>
+    {% if categories_summary %}<div class="category-list">{% for item in categories_summary %}<div class="category-row"><div><span>{{ item.category }}</span><strong>{{ item.total }}</strong></div><progress max="{{ stats.total }}" value="{{ item.total }}" aria-label="{{ item.category }} complaints"></progress></div>{% endfor %}</div>{% else %}<div class="empty-state compact"><span class="empty-symbol"><i class="bi bi-bar-chart"></i></span><p>Category totals appear when reports are submitted.</p></div>{% endif %}
+  </article>
+</section>
+{% endblock %}

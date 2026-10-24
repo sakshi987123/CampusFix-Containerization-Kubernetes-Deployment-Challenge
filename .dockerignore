@@ -1,0 +1,14 @@
+.git
+.gitignore
+.env
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+instance
+campusfix.db
+tests
+report
+screenshots
+README.md
+*.log

@@ -1,0 +1,26 @@
+services:
+  campusfix:
+    build:
+      context: .
+    image: campusfix:1.0
+    container_name: campusfix
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: production
+      CAMPUSFIX_DB: /data/campusfix.db
+      UPLOAD_FOLDER: /data/uploads
+      SESSION_COOKIE_SECURE: "false"
+    volumes:
+      - campusfix-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "from urllib.request import urlopen; urlopen('http://127.0.0.1:5000/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  campusfix-data:

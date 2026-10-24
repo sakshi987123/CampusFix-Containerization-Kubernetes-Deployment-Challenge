@@ -1,0 +1,21 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+instance/**
+!instance/.gitkeep
+campusfix.db
+*.sqlite
+*.sqlite3
+static/uploads/**
+!static/uploads/.gitkeep
+.coverage
+htmlcov/
+.vscode/
+*.log
+# Additional local and generated files
+.env.*
+!.env.example
+report/
+screenshots/
